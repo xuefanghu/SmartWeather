@@ -11,17 +11,9 @@ import java.util.Scanner;
 
 
 /**
- * Used to communicate with the online weather server.
+ * Used to call the online weather server (Weatherbit).
  */
 public final class NetworkUtils {
-    // Use the 16-day forecast API from Weatherbit.
-    private static final String FORECAST_BASE_URL = "https://api.weatherbit.io/v2.0/forecast/daily";
-
-    // The units we want our API to return
-    private static final String units = "metric";
-    // The number of days we want our API to return
-    private static final int numDays = 15;
-
     final static String COUNTRY_PARAM = "country";
     final static String CITY_PARAM = "city";
     final static String UNITS_PARAM = "units";
@@ -29,9 +21,16 @@ public final class NetworkUtils {
     final static String APIKEY_PARAM = "key";
     final static String COUNTRY_VALUE = "US";
     final static String APIKEY_VALUE = "8b25f989a3524c91a2674c2fd8f4cd09";
+    // Use the 16-day forecast API from Weatherbit.
+    private static final String FORECAST_BASE_URL = "https://api.weatherbit.io/v2.0/forecast/daily";
+    // The units we want our API to return
+    private static final String units = "metric";
+    // The number of days we want our API to return
+    private static final int numDays = 15;
 
     /**
      * Builds the URL used to communicate with the weather server using a city name.
+     *
      * @param city The location that will be queried for.
      * @return The URL to use to query the weather server.
      */
@@ -56,6 +55,7 @@ public final class NetworkUtils {
 
     /**
      * This method returns the entire result from the HTTP response.
+     *
      * @param url The URL to fetch the HTTP response from.
      * @return The contents of the HTTP response.
      * @throws IOException Related to network and stream reading

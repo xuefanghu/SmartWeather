@@ -10,10 +10,10 @@ public final class SWDateUtils {
 
     /**
      * Given a day, returns the name for that day.
-     *   E.g "today", "tomorrow", "Wednesday".
-     * @param today The date of today
-     * @param forecastDate The forecast date
+     * E.g "today", "tomorrow", "Wednesday".
      *
+     * @param today        The date of today
+     * @param forecastDate The forecast date
      * @return the string day of the week
      */
     public static String getDayName(LocalDate today, LocalDate forecastDate) {

@@ -19,6 +19,7 @@ public final class ServerJsonUtils {
     /**
      * This method parses JSON from a web response and returns an array of Strings
      * describing the weather over various days from the forecast.
+     *
      * @param forecastJsonStr JSON response from server
      * @return Array of Strings describing weather data
      * @throws JSONException If JSON data cannot be properly parsed
@@ -30,7 +31,7 @@ public final class ServerJsonUtils {
         final String SW_DATA = "data";
 
         /* Temperature info is under "main" for the free 5-day forecast API */
-     //   final String SW_MAIN = "main";
+        //   final String SW_MAIN = "main";
 
         /* High and low temperature for the day */
         final String SW_HIGH = "high_temp";
@@ -66,7 +67,7 @@ public final class ServerJsonUtils {
              * the values are returned in-order by day (which is not guaranteed to be correct).
              */
             long ts = dayForecast.getLong(SW_TIMESTAMP);
-            LocalDate forecastDate = ZonedDateTime.ofInstant(Instant.ofEpochSecond(ts),ZONE_ID)
+            LocalDate forecastDate = ZonedDateTime.ofInstant(Instant.ofEpochSecond(ts), ZONE_ID)
                     .toLocalDate();
             if (forecastDate.isBefore(today)) {
                 continue;

@@ -1,4 +1,3 @@
-
 package com.groupproject.smartweather.Utils;
 
 import android.content.Context;
@@ -7,7 +6,6 @@ import com.groupproject.smartweather.R;
 
 
 public final class WeatherUtils {
-
     /**
      * This method will convert a temperature from Celsius to Fahrenheit.
      *
@@ -15,13 +13,13 @@ public final class WeatherUtils {
      * @return Temperature in degrees Fahrenheit (°F)
      */
     private static double celsiusToFahrenheit(double tempInC) {
-        double tempInF = (tempInC * 1.8) + 32;
-        return tempInF;
+        return (tempInC * 1.8) + 32;
     }
 
     /**
      * This method will perform temperature format conversion.
-     * @param context Android Context to access preferences and resources
+     *
+     * @param context     Android Context to access preferences and resources
      * @param temperature Temperature in degrees Celsius (°C)
      * @return Formatted temperature String
      */
@@ -36,24 +34,20 @@ public final class WeatherUtils {
         return String.format(context.getString(temperatureFormatResId), temperature);
     }
 
-        /**
-         * This method will format the temperatures display: HIGH °C / LOW °C
-         * @param context Android Context to access preferences and resources
-         * @param high    High temperature for a day
-         * @param low     Low temperature for a day
-         * @return String HIGH °C / LOW °C
-         */
-        public static String formatHighLow(Context context, double high, double low) {
-            long roundedHigh = Math.round(high);
-            long roundedLow = Math.round(low);
-
-            String formattedHigh = formatTemperature(context, roundedHigh);
-            String formattedLow = formatTemperature(context, roundedLow);
-
-            String highLowStr = formattedHigh + " / " + formattedLow;
-            return highLowStr;
-        }
+    /**
+     * This method will format the temperatures display: HIGH °C / LOW °C
+     *
+     * @param context Android Context to access preferences and resources
+     * @param high    High temperature for a day
+     * @param low     Low temperature for a day
+     * @return String HIGH °C / LOW °C
+     */
+    public static String formatHighLow(Context context, double high, double low) {
+        String formattedHigh = formatTemperature(context, high);
+        String formattedLow = formatTemperature(context, low);
+        return formattedHigh + " / " + formattedLow;
     }
+}
 
 
 

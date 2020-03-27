@@ -1,4 +1,3 @@
-
 package com.groupproject.smartweather.Utils;
 
 import android.content.Context;
@@ -14,12 +13,13 @@ public class Preferences {
 
     /**
      * Returns true if the user has selected metric.
+     *
      * @param context Context used to get the value
      * @return true If metric display should be used
      */
     public static boolean isMetric(Context context) {
         // TODO: implement the metric selection UI and update the value properly.
-        return true;
+        return false;
     }
 
 
