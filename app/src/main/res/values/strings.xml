@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">>
+    <string name="app_name">SmartWeather</string>
+    <string name="format_temperature_celsius">
+        <xliff:g id="temp">%1.0f</xliff:g>\u00B0C
+    </string>
+
+    <!-- Temperature format in Fahrenheit [CHAR LIMIT=5] -->
+    <string name="format_temperature_fahrenheit">
+        <xliff:g id="temp">%1.0f</xliff:g>\u00B0F
+    </string>
+</resources>
+
