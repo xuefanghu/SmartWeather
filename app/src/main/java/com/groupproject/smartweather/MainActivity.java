@@ -1,5 +1,6 @@
 package com.groupproject.smartweather;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.groupproject.smartweather.Utils.NetworkUtils;
 import com.groupproject.smartweather.Utils.Preferences;
@@ -18,9 +21,11 @@ import com.groupproject.smartweather.Utils.ServerJsonUtils;
 
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ListItemAdapter.ListItemAdapterOnClickHandler {
 
-    private TextView weatherTextView;
+    private RecyclerView swRecyclerView;
+
+    private ListItemAdapter swListItemAdapter;
 
     private TextView errorMessageShow;
 
@@ -32,8 +37,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        weatherTextView = findViewById(R.id.sw_weather_data);
+        swRecyclerView = findViewById(R.id.recyclerview_forecast);
         errorMessageShow = findViewById(R.id.sw_error_message);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        swRecyclerView.setLayoutManager(layoutManager);
+        swRecyclerView.setHasFixedSize(true);
+
+        swListItemAdapter = new ListItemAdapter(this);
+        swRecyclerView.setAdapter(swListItemAdapter);
+
         loadingIndicator = findViewById(R.id.sw_loading_indicator);
 
         loadWeatherData();
@@ -51,13 +64,21 @@ public class MainActivity extends AppCompatActivity {
         new FetchWeatherTask().execute(city);
     }
 
+    /**
+     * Show a new Activity of weather details for the day clicked.
+     * @param dayWeather
+     */
+    public void onClick(String dayWeather){
+        // TODO: create a new intent for the weather details.
+    }
+
 
     /**
      * This method will make the View for the weather data visible and hide the error message.
      */
     private void showWeatherDataView() {
         errorMessageShow.setVisibility(View.INVISIBLE);
-        weatherTextView.setVisibility(View.VISIBLE);
+        swRecyclerView.setVisibility(View.VISIBLE);
     }
 
 
@@ -65,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
      * This method will make the error message visible and hide the weather view.
      */
     private void showErrorMessage() {
-        weatherTextView.setVisibility(View.INVISIBLE);
+        swRecyclerView.setVisibility(View.INVISIBLE);
         errorMessageShow.setVisibility(View.VISIBLE);
     }
 
@@ -84,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_refresh) {
-            weatherTextView.setText("");
+            swListItemAdapter.setWeatherData(null);
             loadWeatherData();
             return true;
         }
@@ -134,9 +155,7 @@ public class MainActivity extends AppCompatActivity {
             loadingIndicator.setVisibility(View.INVISIBLE);
             if (weatherData != null) {
                 showWeatherDataView();
-                for (String weatherString : weatherData) {
-                    weatherTextView.append((weatherString) + "\n\n\n");
-                }
+                swListItemAdapter.setWeatherData(weatherData);
             } else {
                 showErrorMessage();
             }
