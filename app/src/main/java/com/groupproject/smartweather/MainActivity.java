@@ -1,6 +1,5 @@
 package com.groupproject.smartweather;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,27 +14,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.groupproject.smartweather.Utils.DailyWeatherInfo;
 import com.groupproject.smartweather.Utils.NetworkUtils;
 import com.groupproject.smartweather.Utils.Preferences;
 import com.groupproject.smartweather.Utils.ServerJsonUtils;
 
 import java.net.URL;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ListItemAdapter.ListItemAdapterOnClickHandler {
-
     private RecyclerView swRecyclerView;
-
     private ListItemAdapter swListItemAdapter;
-
     private TextView errorMessageShow;
-
     private ProgressBar loadingIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         swRecyclerView = findViewById(R.id.recyclerview_forecast);
         errorMessageShow = findViewById(R.id.sw_error_message);
@@ -57,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
      * Get the weather data in the background.
      */
     private void loadWeatherData() {
-
         showWeatherDataView();
 
         String city = Preferences.getPreferredWeatherCity(this);
@@ -66,12 +61,12 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
 
     /**
      * Show a new Activity of weather details for the day clicked.
+     *
      * @param dayWeather
      */
-    public void onClick(String dayWeather){
+    public void onClick(DailyWeatherInfo dayWeather) {
         // TODO: create a new intent for the weather details.
     }
-
 
     /**
      * This method will make the View for the weather data visible and hide the error message.
@@ -80,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
         errorMessageShow.setVisibility(View.INVISIBLE);
         swRecyclerView.setVisibility(View.VISIBLE);
     }
-
 
     /**
      * This method will make the error message visible and hide the weather view.
@@ -92,18 +86,14 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         MenuInflater inflater = getMenuInflater();
-
         inflater.inflate(R.menu.forecast, menu);
-
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.action_refresh) {
             swListItemAdapter.setWeatherData(null);
             loadWeatherData();
@@ -112,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
         return super.onOptionsItemSelected(item);
     }
 
-    public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
+    public class FetchWeatherTask extends AsyncTask<String, Void, List<DailyWeatherInfo>> {
 
         @Override
         protected void onPreExecute() {
@@ -121,8 +111,7 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
         }
 
         @Override
-        protected String[] doInBackground(String... params) {
-
+        protected List<DailyWeatherInfo> doInBackground(String... params) {
             // if no zip code
             if (params.length == 0) {
                 Log.e("doInBackground", "no zip code");
@@ -136,13 +125,10 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
             try {
                 String jsonWeatherResponse = NetworkUtils
                         .getDataFromHttp(weatherRequestUrl);
-
-                String[] simpleJsonWeatherData = ServerJsonUtils
-                        .getSimpleWeatherStringsFromJson(MainActivity.this, jsonWeatherResponse);
+                List<DailyWeatherInfo> simpleJsonWeatherData = ServerJsonUtils
+                        .getSimpleWeatherStringsFromJson(jsonWeatherResponse);
                 Log.e("doInBackground", "good! " + jsonWeatherResponse);
-
                 return simpleJsonWeatherData;
-
             } catch (Exception e) {
                 Log.e("doInBackground", "exception");
                 e.printStackTrace();
@@ -151,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
         }
 
         @Override
-        protected void onPostExecute(String[] weatherData) {
+        protected void onPostExecute(List<DailyWeatherInfo> weatherData) {
             loadingIndicator.setVisibility(View.INVISIBLE);
             if (weatherData != null) {
                 showWeatherDataView();
