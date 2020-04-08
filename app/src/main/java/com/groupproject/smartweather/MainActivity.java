@@ -23,6 +23,7 @@ import java.net.URL;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ListItemAdapter.ListItemAdapterOnClickHandler {
+    private TextView cityNameView;
     private RecyclerView swRecyclerView;
     private ListItemAdapter swListItemAdapter;
     private TextView errorMessageShow;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        cityNameView = findViewById(R.id.city_name);
         swRecyclerView = findViewById(R.id.recyclerview_forecast);
         errorMessageShow = findViewById(R.id.sw_error_message);
         LinearLayoutManager layoutManager
@@ -142,6 +144,9 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
             if (weatherData != null) {
                 showWeatherDataView();
                 swListItemAdapter.setWeatherData(weatherData);
+                if (weatherData.size()>0) {
+                    cityNameView.setText(weatherData.get(0).cityName);
+                }
             } else {
                 showErrorMessage();
             }

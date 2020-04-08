@@ -4,11 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/city_name"
+        android:layout_width="354dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="22dp"
+        android:gravity="center"
+        android:padding="16dp"
+        android:textSize="40sp" />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_forecast"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:layout_toEndOf="@id/weather_date" />
 
     <TextView
         android:id="@+id/sw_error_message"
@@ -18,7 +29,6 @@
         android:text="Error. Please try again by clicking REFRESH."
         android:textSize="20sp"
         android:visibility="invisible" />
-
 
     <ProgressBar
         android:id="@+id/sw_loading_indicator"
