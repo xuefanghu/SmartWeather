@@ -14,14 +14,15 @@ public final class WeatherUtils {
     /**
      * This method will perform temperature format conversion.
      *
-     * @param temperature Temperature in degrees Celsius (°C)
+     * @param low Low temperature in degrees Celsius (°C)
+     * @param high High temperature in degrees Celsius (°C)
      * @return Formatted temperature String
      */
-    public static String formatTemperature(double temperature) {
+    public static String formatTemperature(double low, double high) {
         if (!Preferences.isMetric()) {
-            return String.format("%.0fF", celsiusToFahrenheit(temperature));
+            return String.format("%.0f/%.0fF", celsiusToFahrenheit(low), celsiusToFahrenheit(high));
         } else {
-            return String.format("%.0fC", temperature);
+            return String.format("%.0f/%.0fC", low, high);
         }
     }
 }

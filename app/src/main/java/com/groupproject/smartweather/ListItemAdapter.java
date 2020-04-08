@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,8 +19,10 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListIt
 
     private final ListItemAdapterOnClickHandler itemClickHandler;
     private List<DailyWeatherInfo> weatherData;
+    private Context context;
 
-    public ListItemAdapter(ListItemAdapterOnClickHandler clickHandler) {
+    public ListItemAdapter(Context context, ListItemAdapterOnClickHandler clickHandler) {
+        this.context = context;
         itemClickHandler = clickHandler;
     }
 
@@ -39,16 +42,13 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListIt
     @Override
     public void onBindViewHolder(ListItemAdapterViewHolder listItemAdapterViewHolder, int pos) {
         DailyWeatherInfo info = weatherData.get(pos);
-        String format;
-        if (Preferences.isMetric()) {
-            format = "%s - %s - %s/%s";
-        } else {
-            format = "%s - %s - %s/%s";
-        }
-        String weatherOfTheDay = String.format(format, info.dateDisplayStr, info.weatherDesc,
-                WeatherUtils.formatTemperature(info.highTemp),
-                WeatherUtils.formatTemperature(info.lowTemp));
-        listItemAdapterViewHolder.weatherTextView.setText(weatherOfTheDay);
+        listItemAdapterViewHolder.dateView.setText(info.dateDisplayStr);
+        listItemAdapterViewHolder.descView.setText(info.weatherDesc);
+        listItemAdapterViewHolder.tempView.setText(
+                WeatherUtils.formatTemperature(info.lowTemp, info.highTemp));
+        int resourceImage = context.getResources().getIdentifier(info.weatherIconID, "drawable",
+                context.getPackageName());
+        listItemAdapterViewHolder.iconView.setImageResource(resourceImage);
     }
 
     @Override
@@ -69,11 +69,17 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListIt
     }
 
     public class ListItemAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public final TextView weatherTextView;
+        public final TextView dateView;
+        public final ImageView iconView;
+        public final TextView descView;
+        public final TextView tempView;
 
         public ListItemAdapterViewHolder(View view) {
             super(view);
-            weatherTextView = view.findViewById(R.id.sw_weather_data);
+            dateView = view.findViewById(R.id.weather_date);
+            iconView = view.findViewById(R.id.weather_icon);
+            descView = view.findViewById(R.id.weather_desc);
+            tempView = view.findViewById(R.id.high_low_temp);
             view.setOnClickListener(this);
         }
 

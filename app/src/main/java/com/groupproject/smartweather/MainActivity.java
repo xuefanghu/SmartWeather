@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
         swRecyclerView.setLayoutManager(layoutManager);
         swRecyclerView.setHasFixedSize(true);
 
-        swListItemAdapter = new ListItemAdapter(this);
+        swListItemAdapter = new ListItemAdapter(this, this);
         swRecyclerView.setAdapter(swListItemAdapter);
 
         loadingIndicator = findViewById(R.id.sw_loading_indicator);

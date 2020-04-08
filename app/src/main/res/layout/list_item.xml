@@ -1,21 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="70dp" >
 
     <TextView
-        android:id="@+id/sw_weather_data"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16dp" />
+        android:id="@+id/weather_date"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:background="#dadada" />
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/weather_icon"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_toEndOf="@id/weather_date"
+        app:srcCompat="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/weather_desc"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_toEndOf="@id/weather_icon"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/high_low_temp"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_toEndOf="@id/weather_desc"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>
