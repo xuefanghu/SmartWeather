@@ -1,5 +1,7 @@
 package com.groupproject.smartweather;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -99,6 +101,12 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
         if (id == R.id.action_refresh) {
             swListItemAdapter.setWeatherData(null);
             loadWeatherData();
+            return true;
+        }
+
+        if (id == R.id.action_settings) {
+            Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
+            startActivity(startSettingsActivity);
             return true;
         }
         return super.onOptionsItemSelected(item);

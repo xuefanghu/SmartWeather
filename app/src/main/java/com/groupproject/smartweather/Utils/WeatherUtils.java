@@ -19,10 +19,10 @@ public final class WeatherUtils {
      * @return Formatted temperature String
      */
     public static String formatTemperature(double low, double high) {
-        if (!Preferences.isMetric()) {
-            return String.format("%.0f/%.0fF", celsiusToFahrenheit(low), celsiusToFahrenheit(high));
+        if (!Preferences.getIsMetric()) {
+            return String.format("%.0f/%.0f°F", celsiusToFahrenheit(low), celsiusToFahrenheit(high));
         } else {
-            return String.format("%.0f/%.0fC", low, high);
+            return String.format("%.0f/%.0f°C", low, high);
         }
     }
 }
