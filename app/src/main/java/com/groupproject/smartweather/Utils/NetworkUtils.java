@@ -15,6 +15,8 @@ import java.util.Scanner;
  */
 public final class NetworkUtils {
     final static String COUNTRY_PARAM = "country";
+    final static String LAT_PARAM = "lat";
+    final static String LNG_PARAM = "lon";
     final static String CITY_PARAM = "city";
     final static String UNITS_PARAM = "units";
     final static String DAYS_PARAM = "days";
@@ -29,23 +31,30 @@ public final class NetworkUtils {
     private static final int numDays = 15;
 
     /**
-     * Builds the URL used to communicate with the weather server using a city name.
+     * Builds the URL used to communicate with the weather server using a location.
      *
-     * @param city The location that will be queried for.
+     * @param location The location that will be queried for.
      * @return The URL to use to query the weather server.
      */
-    public static URL buildUrl(String city) {
+    public static URL buildUrl(Preferences.Location location) {
         // return the URL used to query Weatherbit's API
-        Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
-                .appendQueryParameter(COUNTRY_PARAM, COUNTRY_VALUE)
-                .appendQueryParameter(CITY_PARAM, city)
+        Uri.Builder builder = Uri.parse(FORECAST_BASE_URL).buildUpon()
                 .appendQueryParameter(UNITS_PARAM, units)
                 .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
-                .appendQueryParameter(APIKEY_PARAM, APIKEY_VALUE)
-                .build();
-
+                .appendQueryParameter(APIKEY_PARAM, APIKEY_VALUE);
+        if (location.lat != 0 && location.lng != 0) {
+            // Case of lat/lng from the device GPS.
+            builder.appendQueryParameter(LAT_PARAM, Double.toString(location.lat))
+                    .appendQueryParameter(LNG_PARAM, Double.toString(location.lng));
+        } else if (location.locationStr.length()>0){
+            // Case of city name from the user input.
+            builder.appendQueryParameter(CITY_PARAM, location.locationStr);
+        } else {
+            // No location available.
+            builder.appendQueryParameter(CITY_PARAM, Preferences.DEFAULT_CITY);
+        }
         try {
-            return new URL(builtUri.toString());
+            return new URL(builder.build().toString());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

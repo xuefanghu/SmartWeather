@@ -1,6 +1,5 @@
 package com.groupproject.smartweather;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -58,9 +57,7 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
      */
     private void loadWeatherData() {
         showWeatherDataView();
-
-        String city = Preferences.getPreferredWeatherCity(this);
-        new FetchWeatherTask().execute(city);
+        new FetchWeatherTask().execute();
     }
 
     /**
@@ -122,15 +119,7 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
 
         @Override
         protected List<DailyWeatherInfo> doInBackground(String... params) {
-            // if no zip code
-            if (params.length == 0) {
-                Log.e("doInBackground", "no zip code");
-                return null;
-            }
-
-            String city = params[0];
-            Log.e("doInBackground location", city);
-            URL weatherRequestUrl = NetworkUtils.buildUrl(city);
+            URL weatherRequestUrl = NetworkUtils.buildUrl(Preferences.getPreferredLocation());
 
             try {
                 String jsonWeatherResponse = NetworkUtils

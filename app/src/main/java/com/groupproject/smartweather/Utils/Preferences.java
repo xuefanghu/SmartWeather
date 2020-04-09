@@ -1,21 +1,53 @@
 package com.groupproject.smartweather.Utils;
 
-import android.content.Context;
-
 
 public class Preferences {
-    private static final String DEFAULT_CITY = "San Jose";
     private static boolean isMetric = false;
+    // The default city if the input city name is empty and the GPS is not available either.
+    public final static String DEFAULT_CITY = "San Jose, CA";
+    // TODO: default to GPS location once ready.
+    private static Location location = new Location(DEFAULT_CITY);
 
-    public static String getPreferredWeatherCity(Context context) {
-        // TODO: implement the city selection UI and update the value properly.
-        return Preferences.DEFAULT_CITY;
+    // Data structure to hold the weather location chosen by the user.
+    public static class Location {
+        // The location in string format.
+        public String locationStr;
+
+        // The location in lat/lng format.
+        public double lat;
+        public double lng;
+
+        public Location(String locationStr) {
+            this.locationStr = locationStr;
+        }
+
+        public Location(double lat, double lng) {
+            this.lat = lat;
+            this.lng = lng;
+            this.locationStr = "";
+        }
+    }
+
+    /**
+     * Get the user input location.
+     * @return the location.
+     */
+    public static Location getPreferredLocation() {
+        return location;
+    }
+
+    /**
+     * Set the user inut location.
+     * @param value
+     */
+    public static void setPreferredLocation(Location value) {
+        location = value;
     }
 
     /**
      * Check if the user has selected metric.
      *
-     * @return true If metric display should be used
+     * @return true if metric display should be used
      */
     public static boolean getIsMetric() {
         return isMetric;
