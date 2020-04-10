@@ -1,6 +1,11 @@
 package com.groupproject.smartweather;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,7 +28,8 @@ import com.groupproject.smartweather.Utils.ServerJsonUtils;
 import java.net.URL;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ListItemAdapter.ListItemAdapterOnClickHandler {
+public class MainActivity extends AppCompatActivity implements
+        ListItemAdapter.ListItemAdapterOnClickHandler {
     private TextView cityNameView;
     private RecyclerView swRecyclerView;
     private ListItemAdapter swListItemAdapter;
@@ -38,8 +44,8 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
         cityNameView = findViewById(R.id.city_name);
         swRecyclerView = findViewById(R.id.recyclerview_forecast);
         errorMessageShow = findViewById(R.id.sw_error_message);
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(
+                this, LinearLayoutManager.VERTICAL, false);
         swRecyclerView.setLayoutManager(layoutManager);
         swRecyclerView.setHasFixedSize(true);
 
@@ -48,16 +54,18 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
 
         loadingIndicator = findViewById(R.id.sw_loading_indicator);
 
-        loadWeatherData();
+        loadWeatherDataWithPermissionRequest();
     }
 
     /**
-     * This method will get the weather information of user's preferred city location
-     * Get the weather data in the background.
+     * This method gets the weather information in the background based on the user input
+     * location or the current GPS location.
+     *
+     * @param currentLocation The current location from the device GPS.
      */
-    private void loadWeatherData() {
+    private void loadWeatherData(Location currentLocation) {
         showWeatherDataView();
-        new FetchWeatherTask().execute();
+        new FetchWeatherTask().execute(currentLocation);
     }
 
     /**
@@ -79,9 +87,12 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
 
     /**
      * This method will make the error message visible and hide the weather view.
+     *
+     * @param msg The error message to display.
      */
-    private void showErrorMessage() {
+    private void showErrorMessage(String msg) {
         swRecyclerView.setVisibility(View.INVISIBLE);
+        errorMessageShow.setText(msg);
         errorMessageShow.setVisibility(View.VISIBLE);
     }
 
@@ -97,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
             swListItemAdapter.setWeatherData(null);
-            loadWeatherData();
+            loadWeatherDataWithPermissionRequest();
             return true;
         }
 
@@ -109,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
         return super.onOptionsItemSelected(item);
     }
 
-    public class FetchWeatherTask extends AsyncTask<String, Void, List<DailyWeatherInfo>> {
+    public class FetchWeatherTask extends AsyncTask<Location, Void, List<DailyWeatherInfo>> {
 
         @Override
         protected void onPreExecute() {
@@ -118,9 +129,12 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
         }
 
         @Override
-        protected List<DailyWeatherInfo> doInBackground(String... params) {
-            URL weatherRequestUrl = NetworkUtils.buildUrl(Preferences.getPreferredLocation());
-
+        protected List<DailyWeatherInfo> doInBackground(Location... params) {
+            if (params.length <1) {
+                return null;
+            }
+            URL weatherRequestUrl = NetworkUtils.buildUrl(
+                    Preferences.getPreferredLocation(), params[0]);
             try {
                 String jsonWeatherResponse = NetworkUtils
                         .getDataFromHttp(weatherRequestUrl);
@@ -145,8 +159,48 @@ public class MainActivity extends AppCompatActivity implements ListItemAdapter.L
                     cityNameView.setText(weatherData.get(0).cityName);
                 }
             } else {
-                showErrorMessage();
+                showErrorMessage("Error. Please try again by clicking REFRESH.");
             }
+        }
+    }
+
+    // Get user GPS location
+    private static final int LOCATION_REQUEST = 457;
+    public void loadWeatherDataWithPermissionRequest() {
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+            // Request user permission to access the GPS location.
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_REQUEST);
+        } else {
+            loadWeatherDataWithPermissionCheck();
+        }
+    }
+
+    void loadWeatherDataWithPermissionCheck() {
+        boolean hasPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED;
+        if (hasPermission) {
+            LocationManager locationManager = (LocationManager) getSystemService(
+                    Context.LOCATION_SERVICE);
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location != null || !Preferences.getPreferredLocation().isEmpty()) {
+                loadWeatherData(location);
+            } else {
+                showErrorMessage(
+                        "GPS location not available. Please enter location in SETTINGS.");
+            }
+        }else {
+            showErrorMessage("Location permission required. Please try again.");
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        if (requestCode == LOCATION_REQUEST) {
+            loadWeatherDataWithPermissionCheck();
         }
     }
 }

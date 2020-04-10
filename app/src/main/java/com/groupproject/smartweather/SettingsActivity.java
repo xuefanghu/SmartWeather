@@ -2,7 +2,6 @@ package com.groupproject.smartweather;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.RadioButton;
@@ -24,7 +23,7 @@ public class SettingsActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, TopUSCities.CITY_LIST);
         AutoCompleteTextView textView = findViewById(R.id.city_input);
         textView.setAdapter(adapter);
-        textView.setText(Preferences.getPreferredLocation().locationStr);
+        textView.setText(Preferences.getPreferredLocation());
 
         // Render the Celsius/Fahrenheit selection component with user's previous choice pre-filled.
         int checked_id;
@@ -47,27 +46,16 @@ public class SettingsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Set the user's choice of C or F on the preference page.
-    public void onRadioButtonClicked(View view) {
-        // Is the button checked?
-        boolean checked = ((RadioButton) view).isChecked();
-        // Check which radio button was clicked
-        switch(view.getId()) {
-            case R.id.c_radio_button:
-                    Preferences.setIsMetric(checked);
-                    break;
-            case R.id.f_radio_button:
-                Preferences.setIsMetric(!checked);
-                    break;
-        }
-    }
-
     @Override
     public void onPause() {
         super.onPause();
-        // Save the location to the Preferences.
+        // Save the input location (which has higher priority than the GPS location).
         String locationStr = ((AutoCompleteTextView)findViewById(R.id.city_input))
-                .getEditableText().toString();
-        Preferences.setPreferredLocation(new Preferences.Location(locationStr));
+                .getEditableText().toString().trim();
+        Preferences.setPreferredLocation(locationStr);
+
+        // Save the choice of C or F.
+        boolean isMetric = ((RadioButton) findViewById(R.id.c_radio_button)).isChecked();
+        Preferences.setIsMetric(isMetric);
     }
 }

@@ -1,5 +1,6 @@
 package com.groupproject.smartweather.Utils;
 
+import android.location.Location;
 import android.net.Uri;
 
 import java.io.IOException;
@@ -33,22 +34,23 @@ public final class NetworkUtils {
     /**
      * Builds the URL used to communicate with the weather server using a location.
      *
-     * @param location The location that will be queried for.
+     * @param locationStr The location string entered by the user.
+     * @param currentLocation The current location from the device GPS.
      * @return The URL to use to query the weather server.
      */
-    public static URL buildUrl(Preferences.Location location) {
+    public static URL buildUrl(String locationStr, Location currentLocation) {
         // return the URL used to query Weatherbit's API
         Uri.Builder builder = Uri.parse(FORECAST_BASE_URL).buildUpon()
                 .appendQueryParameter(UNITS_PARAM, units)
                 .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
                 .appendQueryParameter(APIKEY_PARAM, APIKEY_VALUE);
-        if (location.lat != 0 && location.lng != 0) {
-            // Case of lat/lng from the device GPS.
-            builder.appendQueryParameter(LAT_PARAM, Double.toString(location.lat))
-                    .appendQueryParameter(LNG_PARAM, Double.toString(location.lng));
-        } else if (location.locationStr.length()>0){
+        if (locationStr.length() > 0) {
             // Case of city name from the user input.
-            builder.appendQueryParameter(CITY_PARAM, location.locationStr);
+            builder.appendQueryParameter(CITY_PARAM, locationStr);
+        } else if (currentLocation != null){
+            // Case of lat/lng from the device GPS.
+            builder.appendQueryParameter(LAT_PARAM, Double.toString(currentLocation.getLatitude()))
+                    .appendQueryParameter(LNG_PARAM, Double.toString(currentLocation.getLongitude()));
         } else {
             // No location available.
             builder.appendQueryParameter(CITY_PARAM, Preferences.DEFAULT_CITY);

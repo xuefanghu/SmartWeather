@@ -1,38 +1,19 @@
 package com.groupproject.smartweather.Utils;
 
 
+// Save the user settings from the SETTINGS page such as preferred location etc.
 public class Preferences {
     private static boolean isMetric = false;
     // The default city if the input city name is empty and the GPS is not available either.
     public final static String DEFAULT_CITY = "San Jose, CA";
-    // TODO: default to GPS location once ready.
-    private static Location location = new Location(DEFAULT_CITY);
-
-    // Data structure to hold the weather location chosen by the user.
-    public static class Location {
-        // The location in string format.
-        public String locationStr;
-
-        // The location in lat/lng format.
-        public double lat;
-        public double lng;
-
-        public Location(String locationStr) {
-            this.locationStr = locationStr;
-        }
-
-        public Location(double lat, double lng) {
-            this.lat = lat;
-            this.lng = lng;
-            this.locationStr = "";
-        }
-    }
+    // The user input location.
+    private static String location = "";
 
     /**
      * Get the user input location.
      * @return the location.
      */
-    public static Location getPreferredLocation() {
+    public static String getPreferredLocation() {
         return location;
     }
 
@@ -40,7 +21,7 @@ public class Preferences {
      * Set the user inut location.
      * @param value
      */
-    public static void setPreferredLocation(Location value) {
+    public static void setPreferredLocation(String value) {
         location = value;
     }
 
@@ -60,6 +41,4 @@ public class Preferences {
     public static void setIsMetric(boolean value) {
         isMetric = value;
     }
-
-
 }
