@@ -23,4 +23,25 @@ public class DailyWeatherInfo {
 
     // User-friendly date string such as "Today", "Tomorrow" and day of the week string.
     public String dateDisplayStr;
+
+    public long sunriseTs;
+    public long sunsetTs;
+    // Cloud coverage (%).
+    public int cloudCoverage;
+    // Relative humidity (%)
+    public int relativeHumidity;
+    // wind direction like "west-northwest" etc.
+    public String windDirFull;
+    // Wind speed (in M/S).
+    public double windSpeed;
+    // Accumulated liquid equivalent precipitation (in MM).
+    public double precipitation;
+    // Pressure (in MB)
+    public double pressure;
+    // Visibility (in KM)
+    public double visibility;
+    // UV Index (0-11+).
+    public double uv;
+    public String timeZone;
+
 }

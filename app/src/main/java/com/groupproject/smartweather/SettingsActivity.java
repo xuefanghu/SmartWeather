@@ -12,7 +12,6 @@ import com.groupproject.smartweather.Utils.Preferences;
 import com.groupproject.smartweather.Utils.TopUSCities;
 
 public class SettingsActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements
      */
     public void onClick(DailyWeatherInfo dayWeather) {
         // TODO: create a new intent for the weather details.
+
     }
 
     /**
