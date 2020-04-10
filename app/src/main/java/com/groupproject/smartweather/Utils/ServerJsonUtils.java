@@ -45,7 +45,7 @@ public final class ServerJsonUtils {
         final String SW_WIND_DIR_FULL = "wind_cdir_full";
         final String SW_WIND_SPEED = "wind_spd";
         final String SW_PRECIPITATION = "precip";
-        final String SW_PRESSURE = "pressure";
+        final String SW_PRESSURE = "pres";
         final String SW_VISIBILITY = "vis";
         final String SW_UV = "uv";
 
