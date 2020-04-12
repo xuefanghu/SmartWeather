@@ -1,11 +1,13 @@
 package com.groupproject.smartweather.Utils;
 
 
+import java.io.Serializable;
+
 /**
  * Data structure to store the weather info of a day, such as the high/low temperatures, wind speed,
  * etc. We will use it to power both the multi-day list view and the single-day detailed view.
  */
-public class DailyWeatherInfo {
+public class DailyWeatherInfo implements Serializable {
     // Weather text such as "Scattered clouds" etc.
     public String weatherDesc;
 
@@ -30,8 +32,8 @@ public class DailyWeatherInfo {
     public int cloudCoverage;
     // Relative humidity (%)
     public int relativeHumidity;
-    // wind direction like "west-northwest" etc.
-    public String windDirFull;
+    // wind direction like "NW" etc.
+    public String windDir;
     // Wind speed (in M/S).
     public double windSpeed;
     // Accumulated liquid equivalent precipitation (in MM).

@@ -74,8 +74,9 @@ public class MainActivity extends AppCompatActivity implements
      * @param dayWeather
      */
     public void onClick(DailyWeatherInfo dayWeather) {
-        // TODO: create a new intent for the weather details.
-
+        Intent intent = new Intent(this, DailyDetailActivity.class);
+        intent.putExtra("dayWeather", dayWeather);
+        startActivity(intent);
     }
 
     /**
@@ -185,12 +186,7 @@ public class MainActivity extends AppCompatActivity implements
             LocationManager locationManager = (LocationManager) getSystemService(
                     Context.LOCATION_SERVICE);
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (location != null || !Preferences.getPreferredLocation().isEmpty()) {
-                loadWeatherData(location);
-            } else {
-                showErrorMessage(
-                        "GPS location not available. Please enter location in SETTINGS.");
-            }
+            loadWeatherData(location);
         }else {
             showErrorMessage("Location permission required. Please try again.");
         }
