@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements
      */
     private void loadWeatherData(Location currentLocation) {
         showWeatherDataView();
-        new FetchWeatherTask().execute(currentLocation);
+        new FetchWeatherTask(this).execute(currentLocation);
     }
 
     /**
@@ -123,6 +123,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public class FetchWeatherTask extends AsyncTask<Location, Void, List<DailyWeatherInfo>> {
+        private final Context context;
+
+        public FetchWeatherTask(Context context) {
+            this.context = context;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -136,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements
                 return null;
             }
             URL weatherRequestUrl = NetworkUtils.buildUrl(
-                    Preferences.getPreferredLocation(), params[0]);
+                    Preferences.getPreferredLocation(context), params[0]);
             try {
                 String jsonWeatherResponse = NetworkUtils
                         .getDataFromHttp(weatherRequestUrl);

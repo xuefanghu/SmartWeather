@@ -22,11 +22,11 @@ public class SettingsActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, TopUSCities.CITY_LIST);
         AutoCompleteTextView textView = findViewById(R.id.city_input);
         textView.setAdapter(adapter);
-        textView.setText(Preferences.getPreferredLocation());
+        textView.setText(Preferences.getPreferredLocation(this));
 
         // Render the Celsius/Fahrenheit selection component with user's previous choice pre-filled.
         int checked_id;
-        if (Preferences.getIsMetric()) {
+        if (Preferences.getIsMetric(this)) {
             checked_id = R.id.c_radio_button;
         } else {
             checked_id = R.id.f_radio_button;
@@ -51,10 +51,10 @@ public class SettingsActivity extends AppCompatActivity {
         // Save the input location (which has higher priority than the GPS location).
         String locationStr = ((AutoCompleteTextView)findViewById(R.id.city_input))
                 .getEditableText().toString().trim();
-        Preferences.setPreferredLocation(locationStr);
+        Preferences.setPreferredLocation(this, locationStr);
 
         // Save the choice of C or F.
         boolean isMetric = ((RadioButton) findViewById(R.id.c_radio_button)).isChecked();
-        Preferences.setIsMetric(isMetric);
+        Preferences.setIsMetric(this, isMetric);
     }
 }

@@ -1,28 +1,36 @@
 package com.groupproject.smartweather.Utils;
 
 
-// Save the user settings from the SETTINGS page such as preferred location etc.
+import android.content.Context;
+import android.content.SharedPreferences;
+
+// Write/read the user settings to/from SharedPreferences, which is a persistent storage.
 public class Preferences {
-    private static boolean isMetric = false;
+    private final static String SHARED_PREFERENCES_NAME = "WeatherSharedPref";
+    private final static String LOCATION_KEY = "preferred_location";
+    private final static String METRIC_KEY = "is_metric";
     // The default city if the input city name is empty and the GPS is not available either.
     public final static String DEFAULT_CITY = "San Jose, CA";
-    // The user input location.
-    private static String location = "";
+
+    // Helper function to access the SharedPreferences.
+    private static SharedPreferences getPreference(Context context) {
+        return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+    }
 
     /**
      * Get the user input location.
      * @return the location.
      */
-    public static String getPreferredLocation() {
-        return location;
+    public static String getPreferredLocation(Context context) {
+        return getPreference(context).getString(LOCATION_KEY, "");
     }
 
     /**
      * Set the user inut location.
      * @param value
      */
-    public static void setPreferredLocation(String value) {
-        location = value;
+    public static void setPreferredLocation(Context context, String value) {
+        getPreference(context).edit().putString(LOCATION_KEY, value).commit();
     }
 
     /**
@@ -30,15 +38,15 @@ public class Preferences {
      *
      * @return true if metric display should be used
      */
-    public static boolean getIsMetric() {
-        return isMetric;
+    public static boolean getIsMetric(Context context) {
+        return getPreference(context).getBoolean(METRIC_KEY, false);
     }
 
     /**
      * Set the user's selection.
      * @param value
      */
-    public static void setIsMetric(boolean value) {
-        isMetric = value;
+    public static void setIsMetric(Context context, boolean value) {
+        getPreference(context).edit().putBoolean(METRIC_KEY, value).commit();
     }
 }

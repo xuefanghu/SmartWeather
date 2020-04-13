@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.groupproject.smartweather.Utils.DailyWeatherInfo;
+import com.groupproject.smartweather.Utils.Preferences;
 import com.groupproject.smartweather.Utils.WeatherUtils;
 
 import java.io.Serializable;
@@ -40,9 +41,9 @@ public class DailyDetailActivity extends AppCompatActivity {
 
         // This row shows the high temperature and the low temperature.
         ((TextView) findViewById(R.id.details_high_temp)).setText(
-                WeatherUtils.formatTemperature(info.highTemp));
+                WeatherUtils.formatTemperature(info.highTemp, Preferences.getIsMetric(this)));
         ((TextView) findViewById(R.id.details_low_temp)).setText(
-                WeatherUtils.formatTemperature(info.lowTemp));
+                WeatherUtils.formatTemperature(info.lowTemp, Preferences.getIsMetric(this)));
 
         // This row shows the sunrise time and the sunset time.
         ZoneId zoneId = ZoneId.of(info.timeZone);

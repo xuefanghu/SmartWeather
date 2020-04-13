@@ -44,8 +44,8 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListIt
         DailyWeatherInfo info = weatherData.get(pos);
         listItemAdapterViewHolder.dateView.setText(info.dateDisplayStr);
         listItemAdapterViewHolder.descView.setText(info.weatherDesc);
-        listItemAdapterViewHolder.tempView.setText(
-                WeatherUtils.formatTemperature(info.lowTemp, info.highTemp));
+        listItemAdapterViewHolder.tempView.setText(WeatherUtils.formatTemperature(info.lowTemp,
+                info.highTemp, Preferences.getIsMetric(context)));
         int resourceImage = context.getResources().getIdentifier(info.weatherIconID, "drawable",
                 context.getPackageName());
         listItemAdapterViewHolder.iconView.setImageResource(resourceImage);
