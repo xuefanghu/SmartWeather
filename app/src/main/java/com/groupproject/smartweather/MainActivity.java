@@ -8,13 +8,13 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,13 +28,12 @@ import com.groupproject.smartweather.Utils.ServerJsonUtils;
 import java.net.URL;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements
-        ListItemAdapter.ListItemAdapterOnClickHandler {
+public class MainActivity extends AppCompatActivity {
     private TextView cityNameView;
     private RecyclerView swRecyclerView;
     private ListItemAdapter swListItemAdapter;
-    private TextView errorMessageShow;
     private ProgressBar loadingIndicator;
+    private TextView weatherQuestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +42,29 @@ public class MainActivity extends AppCompatActivity implements
 
         cityNameView = findViewById(R.id.city_name);
         swRecyclerView = findViewById(R.id.recyclerview_forecast);
-        errorMessageShow = findViewById(R.id.sw_error_message);
         LinearLayoutManager layoutManager = new LinearLayoutManager(
                 this, LinearLayoutManager.VERTICAL, false);
         swRecyclerView.setLayoutManager(layoutManager);
         swRecyclerView.setHasFixedSize(true);
 
-        swListItemAdapter = new ListItemAdapter(this, this);
+        swListItemAdapter = new ListItemAdapter(this,
+                new ListItemAdapter.ListItemAdapterOnClickHandler() {
+            /**
+             * Show a new Activity of weather details for the day clicked.
+             *
+             * @param dayWeather
+             */
+            @Override
+            public void onClick(DailyWeatherInfo dayWeather) {
+                Intent intent = new Intent(MainActivity.this, DailyDetailActivity.class);
+                intent.putExtra("dayWeather", dayWeather);
+                startActivity(intent);
+            }
+        });
         swRecyclerView.setAdapter(swListItemAdapter);
 
         loadingIndicator = findViewById(R.id.sw_loading_indicator);
+        weatherQuestion = findViewById(R.id.weather_question);
 
         loadWeatherDataWithPermissionRequest();
     }
@@ -64,38 +76,25 @@ public class MainActivity extends AppCompatActivity implements
      * @param currentLocation The current location from the device GPS.
      */
     private void loadWeatherData(Location currentLocation) {
-        showWeatherDataView();
         new FetchWeatherTask(this).execute(currentLocation);
     }
 
     /**
-     * Show a new Activity of weather details for the day clicked.
-     *
-     * @param dayWeather
+     * Show a new Activity for weather rating.
      */
-    public void onClick(DailyWeatherInfo dayWeather) {
-        Intent intent = new Intent(this, DailyDetailActivity.class);
-        intent.putExtra("dayWeather", dayWeather);
+    public void onClickRating(View v) {
+        Intent intent = new Intent(this, RatingActivity.class);
+        intent.putExtra("cityName", this.cityNameView.getText().toString());
         startActivity(intent);
     }
 
     /**
-     * This method will make the View for the weather data visible and hide the error message.
-     */
-    private void showWeatherDataView() {
-        errorMessageShow.setVisibility(View.INVISIBLE);
-        swRecyclerView.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * This method will make the error message visible and hide the weather view.
+     * This method will show the error message using Toast.
      *
      * @param msg The error message to display.
      */
     private void showErrorMessage(String msg) {
-        swRecyclerView.setVisibility(View.INVISIBLE);
-        errorMessageShow.setText(msg);
-        errorMessageShow.setVisibility(View.VISIBLE);
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -133,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements
         protected void onPreExecute() {
             super.onPreExecute();
             loadingIndicator.setVisibility(View.VISIBLE);
+            weatherQuestion.setVisibility(View.INVISIBLE);
         }
 
         @Override
@@ -147,10 +147,8 @@ public class MainActivity extends AppCompatActivity implements
                         .getDataFromHttp(weatherRequestUrl);
                 List<DailyWeatherInfo> simpleJsonWeatherData = ServerJsonUtils
                         .getSimpleWeatherStringsFromJson(jsonWeatherResponse);
-                Log.e("doInBackground", "good! " + jsonWeatherResponse);
                 return simpleJsonWeatherData;
             } catch (Exception e) {
-                Log.e("doInBackground", "exception");
                 e.printStackTrace();
                 return null;
             }
@@ -159,8 +157,8 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         protected void onPostExecute(List<DailyWeatherInfo> weatherData) {
             loadingIndicator.setVisibility(View.INVISIBLE);
+            weatherQuestion.setVisibility(View.VISIBLE);
             if (weatherData != null) {
-                showWeatherDataView();
                 swListItemAdapter.setWeatherData(weatherData);
                 if (weatherData.size()>0) {
                     cityNameView.setText(weatherData.get(0).cityName);
