@@ -23,6 +23,10 @@ public class DailyWeatherInfo implements Serializable {
     // Used to display the city name given the device GPS lat/lng.
     public String cityName;
 
+    // The latitude and longitude of the city.
+    public double lat;
+    public double lng;
+
     // User-friendly date string such as "Today", "Tomorrow" and day of the week string.
     public String dateDisplayStr;
 

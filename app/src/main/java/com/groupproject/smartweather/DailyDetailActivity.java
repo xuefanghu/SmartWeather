@@ -23,6 +23,7 @@ public class DailyDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_detail);
 
+        // Get the DailyWeatherInfo passed from MainActivity.
         Bundle bundle = getIntent().getExtras();
         if (bundle == null) {
             return;

@@ -29,6 +29,8 @@ public final class ServerJsonUtils {
 
         // Below are all the json fields we are interested in.
         final String SW_CITY_NAME = "city_name";
+        final String SW_LAT = "lat";
+        final String SW_LNG = "lon";
         final String SW_TIME_ZONE = "timezone";
         /* Weather information. Each day's forecast info is an element of the "data" array */
         final String SW_DATA = "data";
@@ -52,6 +54,8 @@ public final class ServerJsonUtils {
         JSONObject forecastJson = new JSONObject(forecastJsonStr);
         JSONArray weatherArray = forecastJson.getJSONArray(SW_DATA);
         String cityName = forecastJson.getString(SW_CITY_NAME);
+        double lat = Double.parseDouble(forecastJson.getString(SW_LAT));
+        double lng = Double.parseDouble(forecastJson.getString(SW_LNG));
         String timeZone = forecastJson.getString(SW_TIME_ZONE);
         // Display the date/time in local time.
         final ZoneId ZONE_ID = ZoneId.of(timeZone);
@@ -71,6 +75,8 @@ public final class ServerJsonUtils {
             }
             DailyWeatherInfo weatherInfo = new DailyWeatherInfo();
             weatherInfo.cityName = cityName;
+            weatherInfo.lat = lat;
+            weatherInfo.lng = lng;
             weatherInfo.timeZone = timeZone;
             weatherInfo.dateDisplayStr = SWDateUtils.getDayName(today, forecastDate);
             weatherInfo.highTemp = dayForecast.getDouble(SW_HIGH);

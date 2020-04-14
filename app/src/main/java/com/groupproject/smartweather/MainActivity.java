@@ -140,13 +140,25 @@ public class MainActivity extends AppCompatActivity {
             if (params.length <1) {
                 return null;
             }
+            Location currentLocation = params[0];
             URL weatherRequestUrl = NetworkUtils.buildUrl(
-                    Preferences.getPreferredLocation(context), params[0]);
+                    Preferences.getPreferredLocation(context), currentLocation);
             try {
                 String jsonWeatherResponse = NetworkUtils
                         .getDataFromHttp(weatherRequestUrl);
                 List<DailyWeatherInfo> simpleJsonWeatherData = ServerJsonUtils
                         .getSimpleWeatherStringsFromJson(jsonWeatherResponse);
+                if (currentLocation != null && simpleJsonWeatherData.size()>0) {
+                    float[] distance = new float[1];
+                    Location.distanceBetween(
+                            currentLocation.getLatitude(),
+                            currentLocation.getLongitude(),
+                            simpleJsonWeatherData.get(0).lat,
+                            simpleJsonWeatherData.get(0).lng,
+                            distance
+                            );
+                    Preferences.setDistance(context, distance[0]);
+                }
                 return simpleJsonWeatherData;
             } catch (Exception e) {
                 e.printStackTrace();

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "570315413114",
+    "firebase_url": "https://smartweather-neu.firebaseio.com",
+    "project_id": "smartweather-neu",
+    "storage_bucket": "smartweather-neu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570315413114:android:d2c9df8c232f1a0abacdc3",
+        "android_client_info": {
+          "package_name": "com.groupproject.smartweather"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "570315413114-icb4esl4hsbnr1io8m3fko6ukv7rqn5h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYOxEQGp9h5ig4xz2-edH9kZNciHk14vI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "570315413114-icb4esl4hsbnr1io8m3fko6ukv7rqn5h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

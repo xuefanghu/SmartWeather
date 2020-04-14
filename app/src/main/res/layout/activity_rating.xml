@@ -50,6 +50,15 @@
             android:layout_centerHorizontal="true"
             android:numStars="5"
             android:stepSize="0.5" />
+
+        <Button
+            android:id="@+id/submit_my_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/my_rating_bar"
+            android:layout_centerHorizontal="true"
+            android:onClick="onClickSubmitRating"
+            android:text="Submit My Rating" />
     </RelativeLayout>
     <ProgressBar
         android:id="@+id/sw_loading_indicator"
