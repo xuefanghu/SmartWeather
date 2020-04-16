@@ -15,5 +15,6 @@
     <string name="enter_city_location">Enter city location</string>
     <string name="current_location">Current Location</string>
     <string name="display_temperature_in">Display temperature in</string>
+    <string name="weather_question"><u>How do you like the weather?</u></string>
 </resources>
 

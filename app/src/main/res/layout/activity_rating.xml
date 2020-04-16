@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <RelativeLayout
-        android:id = "@+id/rating_info"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
->
+    android:layout_height="match_parent"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp">
         <TextView
             android:id="@+id/city_name"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:gravity="center"
-            android:padding="10dp"
             android:textSize="40sp" />
 
         <TextView
@@ -20,8 +16,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/city_name"
-            android:text="The Average Weather Rating:"
-            android:textSize="20sp" />
+            android:text="The Weighted Weather Rating"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <RatingBar
             android:id="@+id/avg_rating_bar"
@@ -31,16 +28,26 @@
             android:layout_centerHorizontal="true"
             android:numStars="5"
             android:stepSize="0.5"
-            android:isIndicator="true"
-            android:visibility="invisible"/>
+            android:isIndicator="true" />
+
+        <TextView
+            android:id="@+id/avg_rating_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_below="@id/avg_rating_bar"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/my_rating_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/avg_rating_bar"
-            android:text="Rate The Weather:"
-            android:textSize="20sp" />
+            android:layout_below="@id/avg_rating_count"
+            android:layout_marginTop="20dp"
+            android:text="Rate The Weather"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <RatingBar
             android:id="@+id/my_rating_bar"
@@ -59,12 +66,4 @@
             android:layout_centerHorizontal="true"
             android:onClick="onClickSubmitRating"
             android:text="Submit My Rating" />
-    </RelativeLayout>
-    <ProgressBar
-        android:id="@+id/sw_loading_indicator"
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:layout_marginTop="100dp"
-        android:layout_gravity="center"
-        android:visibility="invisible" />
 </RelativeLayout>
