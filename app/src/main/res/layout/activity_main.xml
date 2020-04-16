@@ -23,6 +23,7 @@
         android:layout_height="90dp"
         android:layout_below="@id/weather_question"
         android:gravity="center"
+        android:textColor="#071E29"
         android:textSize="40sp" />
 
     <androidx.recyclerview.widget.RecyclerView
