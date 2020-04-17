@@ -1,10 +1,10 @@
 package com.groupproject.smartweather;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.groupproject.smartweather.Utils.DailyWeatherInfo;
 import com.groupproject.smartweather.Utils.Preferences;
@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 
 public class DailyDetailActivity extends AppCompatActivity {
     final DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,11 +29,11 @@ public class DailyDetailActivity extends AppCompatActivity {
         if (bundle == null) {
             return;
         }
-        Serializable obj =  bundle.getSerializable("dayWeather");
-        if (obj==null) {
+        Serializable obj = bundle.getSerializable("dayWeather");
+        if (obj == null) {
             return;
         }
-        DailyWeatherInfo info= (DailyWeatherInfo)obj;
+        DailyWeatherInfo info = (DailyWeatherInfo) obj;
         ((TextView) findViewById(R.id.weather_date)).setText(info.dateDisplayStr);
         ((TextView) findViewById(R.id.city_name)).setText(info.cityName);
         int resourceImage = getResources().getIdentifier(info.weatherIconID, "drawable",

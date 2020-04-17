@@ -49,7 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         // Save the input location (which has higher priority than the GPS location).
-        String locationStr = ((AutoCompleteTextView)findViewById(R.id.city_input))
+        String locationStr = ((AutoCompleteTextView) findViewById(R.id.city_input))
                 .getEditableText().toString().trim();
         Preferences.setPreferredLocation(this, locationStr);
 

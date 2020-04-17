@@ -83,8 +83,8 @@ public final class ServerJsonUtils {
             weatherInfo.lowTemp = dayForecast.getDouble(SW_LOW);
             weatherInfo.sunriseTs = dayForecast.getLong(SW_SUNRISE_TS);
             weatherInfo.sunsetTs = dayForecast.getLong(SW_SUNSET_TS);
-            weatherInfo.cloudCoverage =dayForecast.getInt(SW_CLOUD_COVERAGE);
-            weatherInfo.relativeHumidity =dayForecast.getInt(SW_RELATIVE_HUMIDITY);
+            weatherInfo.cloudCoverage = dayForecast.getInt(SW_CLOUD_COVERAGE);
+            weatherInfo.relativeHumidity = dayForecast.getInt(SW_RELATIVE_HUMIDITY);
             weatherInfo.windDir = dayForecast.getString(SW_WIND_DIR);
             weatherInfo.windSpeed = dayForecast.getDouble(SW_WIND_SPEED);
             weatherInfo.precipitation = dayForecast.getDouble(SW_PRECIPITATION);

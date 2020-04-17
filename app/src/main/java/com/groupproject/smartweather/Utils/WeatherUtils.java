@@ -14,7 +14,7 @@ public final class WeatherUtils {
     /**
      * This method will perform temperature format conversion.
      *
-     * @param temp temperature in degrees Celsius (°C)
+     * @param temp     temperature in degrees Celsius (°C)
      * @param isMetric whether to format it as Celsius or not.
      * @return Formatted temperature String
      */
@@ -29,8 +29,8 @@ public final class WeatherUtils {
     /**
      * This method will perform temperature format conversion.
      *
-     * @param low Low temperature in degrees Celsius (°C)
-     * @param high High temperature in degrees Celsius (°C)
+     * @param low      Low temperature in degrees Celsius (°C)
+     * @param high     High temperature in degrees Celsius (°C)
      * @param isMetric whether to format it as Celsius or not.
      * @return Formatted temperature String
      */

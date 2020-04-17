@@ -34,7 +34,7 @@ public final class NetworkUtils {
     /**
      * Builds the URL used to communicate with the weather server using a location.
      *
-     * @param locationStr The location string entered by the user.
+     * @param locationStr     The location string entered by the user.
      * @param currentLocation The current location from the device GPS.
      * @return The URL to use to query the weather server.
      */
@@ -47,7 +47,7 @@ public final class NetworkUtils {
         if (locationStr.length() > 0) {
             // Case of city name from the user input.
             builder.appendQueryParameter(CITY_PARAM, locationStr);
-        } else if (currentLocation != null){
+        } else if (currentLocation != null) {
             // Case of lat/lng from the device GPS.
             builder.appendQueryParameter(LAT_PARAM, Double.toString(currentLocation.getLatitude()))
                     .appendQueryParameter(LNG_PARAM, Double.toString(currentLocation.getLongitude()));

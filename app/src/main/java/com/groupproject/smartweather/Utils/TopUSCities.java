@@ -4,7 +4,7 @@ public class TopUSCities {
     // Top US cities used for auto-complete (in AutoCompleteTextView).
     // Other cities can still be entered manually.
     // The city list is from http://www.biggestuscities.com/top-1000.
-    public final static String[] CITY_LIST = new String[] {
+    public final static String[] CITY_LIST = new String[]{
             "New York, New York",
             "Los Angeles, California",
             "Chicago, Illinois",

@@ -29,6 +29,8 @@ import java.net.URL;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    // Get user GPS location
+    private static final int LOCATION_REQUEST = 457;
     private TextView cityNameView;
     private RecyclerView swRecyclerView;
     private ListItemAdapter swListItemAdapter;
@@ -49,18 +51,18 @@ public class MainActivity extends AppCompatActivity {
 
         swListItemAdapter = new ListItemAdapter(this,
                 new ListItemAdapter.ListItemAdapterOnClickHandler() {
-            /**
-             * Show a new Activity of weather details for the day clicked.
-             *
-             * @param dayWeather
-             */
-            @Override
-            public void onClick(DailyWeatherInfo dayWeather) {
-                Intent intent = new Intent(MainActivity.this, DailyDetailActivity.class);
-                intent.putExtra("dayWeather", dayWeather);
-                startActivity(intent);
-            }
-        });
+                    /**
+                     * Show a new Activity of weather details for the day clicked.
+                     *
+                     * @param dayWeather
+                     */
+                    @Override
+                    public void onClick(DailyWeatherInfo dayWeather) {
+                        Intent intent = new Intent(MainActivity.this, DailyDetailActivity.class);
+                        intent.putExtra("dayWeather", dayWeather);
+                        startActivity(intent);
+                    }
+                });
         swRecyclerView.setAdapter(swListItemAdapter);
 
         loadingIndicator = findViewById(R.id.sw_loading_indicator);
@@ -121,68 +123,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class FetchWeatherTask extends AsyncTask<Location, Void, List<DailyWeatherInfo>> {
-        private final Context context;
-
-        public FetchWeatherTask(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            loadingIndicator.setVisibility(View.VISIBLE);
-            weatherQuestion.setVisibility(View.INVISIBLE);
-        }
-
-        @Override
-        protected List<DailyWeatherInfo> doInBackground(Location... params) {
-            if (params.length <1) {
-                return null;
-            }
-            Location currentLocation = params[0];
-            URL weatherRequestUrl = NetworkUtils.buildUrl(
-                    Preferences.getPreferredLocation(context), currentLocation);
-            try {
-                String jsonWeatherResponse = NetworkUtils
-                        .getDataFromHttp(weatherRequestUrl);
-                List<DailyWeatherInfo> simpleJsonWeatherData = ServerJsonUtils
-                        .getSimpleWeatherStringsFromJson(jsonWeatherResponse);
-                if (currentLocation != null && simpleJsonWeatherData.size()>0) {
-                    float[] distance = new float[1];
-                    Location.distanceBetween(
-                            currentLocation.getLatitude(),
-                            currentLocation.getLongitude(),
-                            simpleJsonWeatherData.get(0).lat,
-                            simpleJsonWeatherData.get(0).lng,
-                            distance
-                            );
-                    Preferences.setDistance(context, distance[0]);
-                }
-                return simpleJsonWeatherData;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(List<DailyWeatherInfo> weatherData) {
-            loadingIndicator.setVisibility(View.INVISIBLE);
-            weatherQuestion.setVisibility(View.VISIBLE);
-            if (weatherData != null) {
-                swListItemAdapter.setWeatherData(weatherData);
-                if (weatherData.size()>0) {
-                    cityNameView.setText(weatherData.get(0).cityName);
-                }
-            } else {
-                showErrorMessage("Error. Please try again by clicking REFRESH.");
-            }
-        }
-    }
-
-    // Get user GPS location
-    private static final int LOCATION_REQUEST = 457;
     public void loadWeatherDataWithPermissionRequest() {
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
@@ -202,17 +142,76 @@ public class MainActivity extends AppCompatActivity {
                     Context.LOCATION_SERVICE);
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             loadWeatherData(location);
-        }else {
+        } else {
             showErrorMessage("Location permission required. Please try again.");
         }
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
         if (requestCode == LOCATION_REQUEST) {
             loadWeatherDataWithPermissionCheck();
+        }
+    }
+
+    public class FetchWeatherTask extends AsyncTask<Location, Void, List<DailyWeatherInfo>> {
+        private final Context context;
+
+        public FetchWeatherTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loadingIndicator.setVisibility(View.VISIBLE);
+            weatherQuestion.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        protected List<DailyWeatherInfo> doInBackground(Location... params) {
+            if (params.length < 1) {
+                return null;
+            }
+            Location currentLocation = params[0];
+            URL weatherRequestUrl = NetworkUtils.buildUrl(
+                    Preferences.getPreferredLocation(context), currentLocation);
+            try {
+                String jsonWeatherResponse = NetworkUtils
+                        .getDataFromHttp(weatherRequestUrl);
+                List<DailyWeatherInfo> simpleJsonWeatherData = ServerJsonUtils
+                        .getSimpleWeatherStringsFromJson(jsonWeatherResponse);
+                if (currentLocation != null && simpleJsonWeatherData.size() > 0) {
+                    float[] distance = new float[1];
+                    Location.distanceBetween(
+                            currentLocation.getLatitude(),
+                            currentLocation.getLongitude(),
+                            simpleJsonWeatherData.get(0).lat,
+                            simpleJsonWeatherData.get(0).lng,
+                            distance
+                    );
+                    Preferences.setDistance(context, distance[0]);
+                }
+                return simpleJsonWeatherData;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(List<DailyWeatherInfo> weatherData) {
+            loadingIndicator.setVisibility(View.INVISIBLE);
+            weatherQuestion.setVisibility(View.VISIBLE);
+            if (weatherData != null) {
+                swListItemAdapter.setWeatherData(weatherData);
+                if (weatherData.size() > 0) {
+                    cityNameView.setText(weatherData.get(0).cityName);
+                }
+            } else {
+                showErrorMessage("Error. Please try again by clicking REFRESH.");
+            }
         }
     }
 }
